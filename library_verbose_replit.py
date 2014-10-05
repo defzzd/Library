@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-## http://repl.it/YaS
-
-
 
 '''
 
@@ -281,7 +278,6 @@ class Book:
                 
 def determine_if_this_is_a_valid_shelf_name(which_shelf_letter):
     
-    ''' Sidesteps try:except for validating shelf name input. '''
     
     which_shelf_letter = which_shelf_letter.lower()
         
@@ -364,8 +360,6 @@ def capitalize_first_letter(input_string):
             
 def handle_input(input_string, supplied_reference_to_the_library):
     
-    ## commented to resolve python 3.4.1 --> 2.7.2 conflicts
-    #input_string = input_string.lower()
     
     ## The leading number lets us use sorted() to list commands in this order. List slicing removes it for display to the user.
     the_dictionary_of_command_help_strings = {
@@ -412,42 +406,40 @@ def handle_input(input_string, supplied_reference_to_the_library):
     elif input_string == 'shelved':
         
         
-        ## commented to resolve python 3.4.1 --> 2.7.2 conflicts
-        #try:
+        try:
         
-        supplied_reference_to_the_library.list_all_shelf_names()
+            supplied_reference_to_the_library.list_all_shelf_names()
             
-        this_shelf = raw_input("\n>> Enter a shelf letter to display the contents of:\n> ")[:1].lower()
-        
-        ## commented to resolve python 3.4.1 --> 2.7.2 conflicts
-        #except:
+            this_shelf = raw_input("\n>> Enter a shelf letter to display the contents of:\n> ")[:1].lower()
+    
+            supplied_reference_to_the_library.list_the_contents_of_this_particular_shelf(this_shelf)
+    
+        except:
             
-        #    print("\n%r is not a valid shelf name!" % (this_shelf))
+            print("\nShelf not found.")
             
-        supplied_reference_to_the_library.list_the_contents_of_this_particular_shelf(this_shelf)
         
         
     elif input_string == 'enshelf':
         
         if len(supplied_reference_to_the_library.the_dictionary_of_unshelved_books) > 0:
             
-            ## commented to resolve python 3.4.1 --> 2.7.2 conflicts
-            #try:
-                
-            move_this_particular_book = raw_input("\n>> List of books currently unshelved: %r\n\n>> Enter a book title to place in a shelf:\n> " % (", ".join(sorted(supplied_reference_to_the_library.the_dictionary_of_unshelved_books))))
-                
-            move_this_particular_book = capitalize_first_letter(move_this_particular_book)
-                
-            to_this_particular_shelf = raw_input("\n>> List of shelves in the library: %r\n\n>> Enter a shelf letter to place the masterpiece %r inside:\n> " % (", ".join(sorted(supplied_reference_to_the_library.the_card_catalogue)), move_this_particular_book))[:1].lower()
-
-            supplied_reference_to_the_library.the_dictionary_of_unshelved_books[move_this_particular_book].enshelf(which_shelf_letter=to_this_particular_shelf, no_shuffle_trace=True)
-                
-            print("\n%r has been moved to shelf letter %r." % (move_this_particular_book, to_this_particular_shelf))
             
-            ## commented to resolve python 3.4.1 --> 2.7.2 conflicts
-            #except:
-            #    
-            #    print("\nError! Either %r is not a valid book title in the pile of unshelved books or the shelf %r is not a valid shelf letter." % (move_this_particular_book, to_this_particular_shelf))
+            try:
+                    
+                move_this_particular_book = raw_input("\n>> List of books currently unshelved: %r\n\n>> Enter a book title to place in a shelf:\n> " % (", ".join(sorted(supplied_reference_to_the_library.the_dictionary_of_unshelved_books))))
+                    
+                move_this_particular_book = capitalize_first_letter(move_this_particular_book)
+                    
+                to_this_particular_shelf = raw_input("\n>> List of shelves in the library: %r\n\n>> Enter a shelf letter to place the masterpiece %r inside:\n> " % (", ".join(sorted(supplied_reference_to_the_library.the_card_catalogue)), move_this_particular_book))[:1].lower()
+
+                supplied_reference_to_the_library.the_dictionary_of_unshelved_books[move_this_particular_book].enshelf(which_shelf_letter=to_this_particular_shelf, no_shuffle_trace=True)
+                    
+                print("\n%r has been moved to shelf letter %r." % (move_this_particular_book, to_this_particular_shelf))
+                
+            except:
+                
+                print("\nError! Shelf or book not recognized.")
                 
         else:
             
@@ -457,30 +449,31 @@ def handle_input(input_string, supplied_reference_to_the_library):
     elif input_string == 'unshelf':
         
         
-        ## commented to resolve python 3.4.1 --> 2.7.2 conflicts
-        #try:
+        try:
             
-        from_this_particular_shelf = raw_input("\n>> List of shelves in the library: %r\n\n>> Enter a shelf letter to remove a book from:\n> " % (", ".join(sorted(supplied_reference_to_the_library.the_card_catalogue))))[:1].lower()
             
-        if len(supplied_reference_to_the_library.the_card_catalogue[from_this_particular_shelf].shelf_contents) > 0:
+            supplied_reference_to_the_library.list_all_shelf_names()
             
-            remove_this_particular_book = raw_input("\n>> List of books on shelf letter %r: %r\n\n>> Enter a book title to remove from this shelf:\n> " % (from_this_particular_shelf, ", ".join(sorted(supplied_reference_to_the_library.the_card_catalogue[from_this_particular_shelf].shelf_contents))))
+            from_this_particular_shelf = raw_input("\n>> Enter a shelf letter to remove a book from:\n> ")[:1].lower()
+            
+            if len(supplied_reference_to_the_library.the_card_catalogue[from_this_particular_shelf].shelf_contents) > 0:
+            
+                remove_this_particular_book = raw_input("\n>> List of books on shelf letter %r: %r\n\n>> Enter a book title to remove from this shelf:\n> " % (from_this_particular_shelf, ", ".join(sorted(supplied_reference_to_the_library.the_card_catalogue[from_this_particular_shelf].shelf_contents))))
                 
-            remove_this_particular_book = capitalize_first_letter(remove_this_particular_book)
+                remove_this_particular_book = capitalize_first_letter(remove_this_particular_book)
                 
-            supplied_reference_to_the_library.the_card_catalogue[from_this_particular_shelf].shelf_contents[remove_this_particular_book].unshelf(no_shuffle_trace=True)
+                supplied_reference_to_the_library.the_card_catalogue[from_this_particular_shelf].shelf_contents[remove_this_particular_book].unshelf(no_shuffle_trace=True)
                 
-            print("\n%r has been added to the list of unshelved books." % (remove_this_particular_book))
+                print("\n%r has been added to the list of unshelved books." % (remove_this_particular_book))
                 
-        else:
+            else:
                 
-            print("\n  Shelf letter %r is currently empty." % (from_this_particular_shelf.shelf_letter))
+                print("\n  Shelf letter %r is currently empty." % (from_this_particular_shelf))
                 
-
-        ## commented to resolve python 3.4.1 --> 2.7.2 conflicts            
-        #except:
-        #    
-        #    print("\nError! Either %r is not a valid shelf letter or %r is not a valid book title on that shelf." % (from_this_particular_shelf, move_this_particular_book))
+    
+        except:
+            
+            print("\nError! Shelf or book not found.")
     
     
     elif input_string == 'noshelf':
@@ -551,22 +544,26 @@ def main():
     
         next_command = 'shuffle'
     
-        ## commented to resolve python 3.4.1 --> 2.7.2 conflicts
-        #try:
+        try:
         
-        next_command = raw_input("\nEnter a specific command, press enter to shuffle a random book to a random shelf, or enter 'help' to view a list of commands.\n")
-            
-        next_command = next_command.lower()
-            
-        if next_command == '':
+            next_command = raw_input("\nEnter a specific command, press enter to shuffle a random book to a random shelf, or enter 'help' to view a list of commands.\n")
                 
-            next_command = 'shuffle'
-
-        ## commented to resolve python 3.4.1 --> 2.7.2 conflicts            
-        #except:
-        #
-        #    pass
-        #    #print("\n  Weird error occurred!")
+            ## Input sanitization and validation, from try:except to wringing of nonalphabetics.    
+            next_command = next_command.lower()
+            
+            valid_letters = "abcdefghijklmnopqrstuvwxyz"
+            
+            ## This line runs through next_command and puts everything not in valid_letters into a little box, then connects all those things back into a single string.
+            next_command = ''.join(each_character for each_character in next_command if each_character in valid_letters)    
+                
+            ## The default command: elven tomfoolery.
+            if next_command == '':
+                    
+                next_command = 'shuffle'
+       
+        except:
+        
+            print("\n  Invalid input; this library does not allow numbers or symbols!")
 
             
         command_handler = handle_input(next_command, the_library)
